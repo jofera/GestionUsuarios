@@ -1,5 +1,6 @@
 package es.uma.gestiondeusuarios;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,17 +43,17 @@ public class MainActivity extends Activity {
 				}else{
 					String consulta = "SELECT * FROM Usuarios WHERE usuario = '" + campoUsuario.getText().toString() + "';";
 					// Esto hay que cambiarlo por un Select Escalar (sólo 1 usuario con mismo login por tabla)
-						//List<Object[]> listaUsuarios = bd.select(consulta);
+					//List<Object[]> listaUsuarios = bd.select(consulta);
 					
 					Cursor c = bd.rawQuery(consulta, null);
 					List<Object[]> listaUsuarios = new ArrayList<Object[]>();
-					
-					if(c.getCount() > 0){
+					if(c.moveToFirst()){
 						// La lista la he definido como array de objetos porque es como lo hemos visto en clase
-						Object[] usuario = new Object[c.getColumnCount()];
+						int numFilas = c.getColumnCount();
+						Object[] usuario = new Object[numFilas];
 						do{
-							for(int i = 0;i<usuario.length;i++){
-								usuario[i] = (Object) c.getString(i);
+							for(int i = 0;i<numFilas;i++){
+								usuario[i] = c.getString(i);
 							}
 							listaUsuarios.add(usuario);
 						}while(c.moveToNext());
