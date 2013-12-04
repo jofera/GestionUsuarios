@@ -9,5 +9,10 @@
     <string name="ErrorLoginVacio">Introduzca sus datos de acceso</string>
     <string name="ErrorLoginIncorrecto">El usuario/contraseña no existe</string>
     <string name="LoginCorrecto">Login Correcto</string>
+    <string name="title_activity_gestion_usuarios">GestionUsuarios</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="title_activity_lista_usuarios">ListaUsuarios</string>
 
 </resources>

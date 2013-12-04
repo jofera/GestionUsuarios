@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="9"
+        android:minSdkVersion="11"
         android:targetSdkVersion="18" />
 
     <application
@@ -21,6 +21,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="es.uma.gestiondeusuarios.GestionUsuarios"
+            android:label="@string/title_activity_gestion_usuarios" >
+        </activity>
+        <activity
+            android:name="es.uma.gestiondeusuarios.ListaUsuarios"
+            android:label="@string/title_activity_lista_usuarios" >
         </activity>
     </application>
 

@@ -19,6 +19,8 @@ public class BDUsuarios extends SQLiteOpenHelper {
 		// TODO Auto-generated method stub
 		db.execSQL(sqlCreate);
 		db.execSQL("INSERT INTO Usuarios (usuario, password) VALUES ('admin', 'admin')");
+		db.execSQL("INSERT INTO Usuarios (usuario, password) VALUES ('usuario', 'usuario')");
+		db.execSQL("INSERT INTO Usuarios (usuario, password) VALUES ('invitado', 'invitado')");
 	}
 
 	@Override

@@ -17,20 +17,8 @@
         android:layout_marginTop="128dp"
         android:ems="10"
         android:hint="@string/Usuario"
-        android:inputType="none" />
-
-    <EditText
-        android:id="@+id/campoPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:ems="10"
-        android:hint="@string/Password"
-        android:inputType="textPassword" >
-
-        <requestFocus />
-    </EditText>
+        android:inputType="none"
+        android:singleLine="true" />
 
     <Button
         android:id="@+id/botonLogin"
@@ -49,5 +37,20 @@
         android:layout_alignBottom="@+id/botonLogin"
         android:layout_alignRight="@+id/campoUsuario"
         android:text="Limpiar" />
+
+    <EditText
+        android:id="@+id/campoPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/campoUsuario"
+        android:layout_below="@+id/campoUsuario"
+        android:layout_marginTop="43dp"
+        android:ems="10"
+        android:hint="@string/Password"
+        android:inputType="textPassword"
+        android:singleLine="true" >
+
+        <requestFocus />
+    </EditText>
 
 </RelativeLayout>

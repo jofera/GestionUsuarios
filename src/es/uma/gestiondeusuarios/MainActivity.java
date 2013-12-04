@@ -1,10 +1,10 @@
 package es.uma.gestiondeusuarios;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -21,14 +21,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        //Creo una isntancia de BDUsuarios donde doy de alta la BD "DBusuarios"
         final BDUsuarios bdUsuarios = new BDUsuarios(this, "BDUsuarios", null, 1);
-        
-        //Establezco permisos de sólo lectura para el login
         final SQLiteDatabase bd = bdUsuarios.getReadableDatabase();
-        
-        
-        // Código para el botón de Login
         final Button botonLogin = (Button) findViewById(R.id.botonLogin);
         botonLogin.setOnClickListener(new View.OnClickListener() {
 			
@@ -42,13 +36,9 @@ public class MainActivity extends Activity {
 					Toast.makeText(getApplicationContext(), R.string.ErrorLoginVacio, Toast.LENGTH_LONG).show();
 				}else{
 					String consulta = "SELECT * FROM Usuarios WHERE usuario = '" + campoUsuario.getText().toString() + "';";
-					// Esto hay que cambiarlo por un Select Escalar (sólo 1 usuario con mismo login por tabla)
-					//List<Object[]> listaUsuarios = bd.select(consulta);
-					
 					Cursor c = bd.rawQuery(consulta, null);
 					List<Object[]> listaUsuarios = new ArrayList<Object[]>();
 					if(c.moveToFirst()){
-						// La lista la he definido como array de objetos porque es como lo hemos visto en clase
 						int numFilas = c.getColumnCount();
 						Object[] usuario = new Object[numFilas];
 						do{
@@ -60,8 +50,10 @@ public class MainActivity extends Activity {
 					}
 					
 					if(listaUsuarios.size() > 0){
-						// Pasar a la siguiente ventana
-						Toast.makeText(getApplicationContext(), R.string.LoginCorrecto, Toast.LENGTH_LONG).show();
+						Toast.makeText(getApplicationContext(), R.string.LoginCorrecto, Toast.LENGTH_LONG).show();						
+						Intent intent = new Intent(getApplicationContext(),ListaUsuarios.class);
+						startActivity(intent);
+						overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 					}else{
 						Toast.makeText(getApplicationContext(), R.string.ErrorLoginIncorrecto, Toast.LENGTH_LONG).show();
 					}
@@ -69,10 +61,8 @@ public class MainActivity extends Activity {
 			}
 		});
         
-        // Código para el botón de Limpiar
         final Button botonLimpiar = (Button) findViewById(R.id.botonLimpiar);
         botonLimpiar.setOnClickListener(new View.OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
