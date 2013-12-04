@@ -5,8 +5,10 @@ import java.util.List;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 // Clase que crea, inicializa y destruye la base de datos
 public class BDUsuarios extends SQLiteOpenHelper {
@@ -16,14 +18,15 @@ public class BDUsuarios extends SQLiteOpenHelper {
 	private static final String sqlCreate = "CREATE TABLE " + NOMBRE_TABLA + " (usuario TEXT PRIMARY KEY, password TEXT)";
 
 	public BDUsuarios(Context context) {
-		super(context, NOMBRE_DB, null, VERSION_DB);
 		// TODO Auto-generated constructor stub
+		super(context, NOMBRE_DB, null, VERSION_DB);
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
-		db.execSQL(sqlCreate);
+		db.execSQL("CREATE TABLE " + NOMBRE_TABLA + " (usuario TEXT PRIMARY KEY, password TEXT)");
+		Log.d("Debug","Alta tabla " + sqlCreate);
 	}
 
 	@Override
@@ -36,14 +39,18 @@ public class BDUsuarios extends SQLiteOpenHelper {
 	}
 	
 	public void addUsuario(String nombre, String password){
-		SQLiteDatabase db = this.getWritableDatabase();
-		db.execSQL("INSERT INTO " + NOMBRE_TABLA + " (usuario, password) VALUES ('" + nombre + "', '" + password + "')");
-		db.close();
+		try {
+			SQLiteDatabase db = this.getWritableDatabase();
+			db.execSQL("INSERT INTO " + NOMBRE_TABLA + " (usuario, password) VALUES ('" + nombre + "', '" + password + "')");
+			db.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<Object[]> obtenerUsuarios(){
 		SQLiteDatabase db = this.getReadableDatabase();
-        String consulta = "SELECT * FROM Usuarios";
+        String consulta = "SELECT * FROM " + NOMBRE_TABLA;
 		Cursor c = db.rawQuery(consulta, null);
 		List<Object[]> listaUsuarios = new ArrayList<Object[]>();
 		if(c.moveToFirst()){
@@ -62,7 +69,7 @@ public class BDUsuarios extends SQLiteOpenHelper {
 	
 	public Object[] obtenerUsuario(String nombre){
 		SQLiteDatabase db = this.getReadableDatabase();
-		String consulta = "SELECT * FROM " + NOMBRE_TABLA + " WHERE usuario = '" + nombre + "';";
+		String consulta = "SELECT * FROM " + NOMBRE_TABLA + " WHERE usuario = '" + nombre + "'";
 		Cursor c = db.rawQuery(consulta, null);
 		Object[] usuario = null;
 		List<Object[]> listaUsuarios = new ArrayList<Object[]>();
@@ -77,5 +84,11 @@ public class BDUsuarios extends SQLiteOpenHelper {
 			}while(c.moveToNext());
 		}
 		return usuario;
+	}
+	
+	public boolean compruebaLogin(String usuario, String password){
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery("SELECT * FROM " + NOMBRE_TABLA + " WHERE usuario = '" + usuario + "' AND password = '" + password + "'", null);
+		return (c.getCount() > 0);
 	}
 }
