@@ -1,6 +1,7 @@
 package es.uma.gestiondeusuarios;
 
 import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -14,6 +15,14 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        //Creo una isntancia de BDUsuarios donde doy de alta la BD "DBusuarios"
+        BDUsuarios bdUsuarios = new BDUsuarios(this, "BDUsuarios", null, 1);
+        
+        //Establezco permisos de sólo lectura para el login
+        SQLiteDatabase bd = bdUsuarios.getReadableDatabase();
+        
+        
         // Código para el botón de Login
         final Button botonLogin = (Button) findViewById(R.id.botonLogin);
         botonLogin.setOnClickListener(new View.OnClickListener() {
@@ -26,9 +35,14 @@ public class MainActivity extends Activity {
 				if((campoUsuario.getText().toString().isEmpty()) && 
 						(campoPassword.getText().toString().isEmpty())){
 					Toast.makeText(getApplicationContext(), R.string.ErrorLoginVacio, Toast.LENGTH_LONG).show();
+				}else{
+					String consulta = "SELECT * FROM Usuarios WHERE Username = '" + campoUsuario.getText().toString() + "';";
+					// Esto hay que cambiarlo por un Select Escalar (sólo 1 usuario con mismo login por tabla)
+					List<Object[]> usuarios = bdUsuarios.select(consulta);
 				}
 			}
 		});
+        
         // Código para el botón de Limpiar
         final Button botonLimpiar = (Button) findViewById(R.id.botonLimpiar);
         botonLimpiar.setOnClickListener(new View.OnClickListener() {
