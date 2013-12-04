@@ -5,8 +5,11 @@ import java.util.List;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ListaUsuarios extends Activity {
 
@@ -21,10 +24,18 @@ public class ListaUsuarios extends Activity {
         List<Object[]> listaUsuarios = bdUsuarios.obtenerUsuarios();
 		
 		for(Object[] usuario : listaUsuarios){
-			TextView usuarioTV = new TextView(this.getApplicationContext());
+			final TextView usuarioTV = new TextView(this.getApplicationContext());
 			usuarioTV.setTextSize((float) 32.0);
 			usuarioTV.setText((String) usuario[0]);
 			usuarioTV.setTag((String) usuario[0]);
+			usuarioTV.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// Aquí hay que llamar a una nueva clase donde se gestione el usuario
+					Toast.makeText(getApplicationContext(), "Ha seleccionado " + usuarioTV.getTag(), Toast.LENGTH_SHORT).show();
+				}
+			});
 			linearlayout.addView(usuarioTV);
 		}
 		TextView totalUsersTV = new TextView(this.getApplicationContext());
