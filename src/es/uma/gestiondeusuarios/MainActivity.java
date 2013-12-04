@@ -1,6 +1,10 @@
 package es.uma.gestiondeusuarios;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,10 +21,10 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         
         //Creo una isntancia de BDUsuarios donde doy de alta la BD "DBusuarios"
-        BDUsuarios bdUsuarios = new BDUsuarios(this, "BDUsuarios", null, 1);
+        final BDUsuarios bdUsuarios = new BDUsuarios(this, "BDUsuarios", null, 1);
         
         //Establezco permisos de sólo lectura para el login
-        SQLiteDatabase bd = bdUsuarios.getReadableDatabase();
+        final SQLiteDatabase bd = bdUsuarios.getReadableDatabase();
         
         
         // Código para el botón de Login
@@ -36,9 +40,30 @@ public class MainActivity extends Activity {
 						(campoPassword.getText().toString().isEmpty())){
 					Toast.makeText(getApplicationContext(), R.string.ErrorLoginVacio, Toast.LENGTH_LONG).show();
 				}else{
-					String consulta = "SELECT * FROM Usuarios WHERE Username = '" + campoUsuario.getText().toString() + "';";
+					String consulta = "SELECT * FROM Usuarios WHERE usuario = '" + campoUsuario.getText().toString() + "';";
 					// Esto hay que cambiarlo por un Select Escalar (sólo 1 usuario con mismo login por tabla)
-					List<Object[]> usuarios = bdUsuarios.select(consulta);
+						//List<Object[]> listaUsuarios = bd.select(consulta);
+					
+					Cursor c = bd.rawQuery(consulta, null);
+					List<Object[]> listaUsuarios = new ArrayList<Object[]>();
+					
+					if(c.getCount() > 0){
+						// La lista la he definido como array de objetos porque es como lo hemos visto en clase
+						Object[] usuario = new Object[c.getColumnCount()];
+						do{
+							for(int i = 0;i<usuario.length;i++){
+								usuario[i] = (Object) c.getString(i);
+							}
+							listaUsuarios.add(usuario);
+						}while(c.moveToNext());
+					}
+					
+					if(listaUsuarios.size() > 0){
+						// Pasar a la siguiente ventana
+						Toast.makeText(getApplicationContext(), R.string.LoginCorrecto, Toast.LENGTH_LONG).show();
+					}else{
+						Toast.makeText(getApplicationContext(), R.string.ErrorLoginIncorrecto, Toast.LENGTH_LONG).show();
+					}
 				}
 			}
 		});
