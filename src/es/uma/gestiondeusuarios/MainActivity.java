@@ -1,12 +1,7 @@
 package es.uma.gestiondeusuarios;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -21,8 +16,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        final BDUsuarios bdUsuarios = new BDUsuarios(this, "BDUsuarios", null, 1);
-        final SQLiteDatabase bd = bdUsuarios.getReadableDatabase();
+        final BDUsuarios bdUsuarios = new BDUsuarios(this.getApplicationContext());
+        bdUsuarios.addUsuario("admin", "admin");
+        bdUsuarios.addUsuario("usuario", "usuario");
+		bdUsuarios.addUsuario("invitado", "invitado");		
         final Button botonLogin = (Button) findViewById(R.id.botonLogin);
         botonLogin.setOnClickListener(new View.OnClickListener() {
 			
@@ -35,25 +32,12 @@ public class MainActivity extends Activity {
 						(campoPassword.getText().toString().isEmpty())){
 					Toast.makeText(getApplicationContext(), R.string.ErrorLoginVacio, Toast.LENGTH_LONG).show();
 				}else{
-					String consulta = "SELECT * FROM Usuarios WHERE usuario = '" + campoUsuario.getText().toString() + "';";
-					Cursor c = bd.rawQuery(consulta, null);
-					List<Object[]> listaUsuarios = new ArrayList<Object[]>();
-					if(c.moveToFirst()){
-						int numFilas = c.getColumnCount();
-						Object[] usuario = new Object[numFilas];
-						do{
-							for(int i = 0;i<numFilas;i++){
-								usuario[i] = c.getString(i);
-							}
-							listaUsuarios.add(usuario);
-						}while(c.moveToNext());
-					}
-					
-					if(listaUsuarios.size() > 0){
+					Object[] usuario = bdUsuarios.obtenerUsuario(campoUsuario.getText().toString());
+					if(usuario != null){
 						Toast.makeText(getApplicationContext(), R.string.LoginCorrecto, Toast.LENGTH_LONG).show();						
 						Intent intent = new Intent(getApplicationContext(),ListaUsuarios.class);
-						startActivity(intent);
 						overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+						startActivity(intent);
 					}else{
 						Toast.makeText(getApplicationContext(), R.string.ErrorLoginIncorrecto, Toast.LENGTH_LONG).show();
 					}
