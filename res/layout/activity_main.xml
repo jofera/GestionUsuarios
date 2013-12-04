@@ -27,7 +27,7 @@
         android:layout_alignLeft="@+id/campoUsuario"
         android:layout_below="@+id/campoPassword"
         android:layout_marginTop="62dp"
-        android:text="Entrar" />
+        android:text="@string/BotonEntrar" />
 
     <Button
         android:id="@+id/botonLimpiar"
@@ -36,7 +36,7 @@
         android:layout_alignBaseline="@+id/botonLogin"
         android:layout_alignBottom="@+id/botonLogin"
         android:layout_alignRight="@+id/campoUsuario"
-        android:text="Limpiar" />
+        android:text="@string/BotonLimpiar" />
 
     <EditText
         android:id="@+id/campoPassword"
