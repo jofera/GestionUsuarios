@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ListaUsuarios extends Activity {
 
@@ -20,9 +19,10 @@ public class ListaUsuarios extends Activity {
 		setContentView(R.layout.activity_lista_usuarios);
 		LinearLayout linearlayout = (LinearLayout) findViewById(R.id.linearlayout);
 		
-        final BDUsuarios bdUsuarios = new BDUsuarios(this.getApplicationContext());
+        final BD bd = new BD(getApplicationContext());
+        final Usuarios usuarios = new Usuarios();
 		
-        List<Object[]> listaUsuarios = bdUsuarios.obtenerUsuarios();
+        List<Object[]> listaUsuarios = usuarios.obtenerUsuarios(bd.getReadableDatabase());
 		
 		for(Object[] usuario : listaUsuarios){
 			final TextView usuarioTV = new TextView(this.getApplicationContext());

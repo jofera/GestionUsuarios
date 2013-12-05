@@ -4,8 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class GestionarUsuario extends Activity {
 
@@ -14,11 +15,10 @@ public class GestionarUsuario extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_gestionar_usuario);
 		Intent intent = getIntent();
-		// Aquí hay que llamar a una nueva clase donde se gestione el usuario
-		Toast.makeText(getApplicationContext(), "Ha seleccionado " + (String) intent.getStringExtra("Usuario"), Toast.LENGTH_SHORT).show();
-		final BDUsuarios bdUsuarios = new BDUsuarios(this.getApplicationContext());
-		final BDRoles bdRoles = new BDRoles(this.getApplicationContext());
-		Object[] usuario = bdUsuarios.obtenerUsuario((String) intent.getStringExtra("Usuario"));
+        final BD bd = new BD(getApplicationContext());
+		final Usuarios usuarios = new Usuarios();
+		final Roles roles = new Roles();
+		Object[] usuario = usuarios.obtenerUsuario(bd.getReadableDatabase(),(String) intent.getStringExtra("Usuario"));
 		
 		final EditText campoUsuario = (EditText) findViewById(R.id.campoGestionUsuario);
 		final EditText campoPassword = (EditText) findViewById(R.id.campoGestionPassword);
@@ -29,16 +29,25 @@ public class GestionarUsuario extends Activity {
 		
 		campoUsuario.setText((String) usuario[0]);
 		campoPassword.setText((String) usuario[1]);
-		campoRol.setText(bdRoles.nombreRol(Integer.valueOf((usuario[2].toString()))));
+		campoRol.setHint(roles.nombreRol(bd.getReadableDatabase(),Integer.valueOf(
+				(intent.getStringExtra("Rol") != null) ? intent.getStringExtra("Rol") : (usuario[2].toString()))));
 		campoNombre.setText((String) usuario[3]);
 		campoEmail.setText((String) usuario[4]);
-		campoTelefono.setText((String) usuario[5]);		
+		campoTelefono.setText((String) usuario[5]);
+		campoRol.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intentRol = new Intent(getApplicationContext(), SeleccionRol.class);
+				intentRol.putExtra("Usuario",campoUsuario.getText().toString());
+				startActivity(intentRol);
+			}
+		});
 		
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.gestionar_usuario, menu);
 		return true;
 	}

@@ -25,5 +25,6 @@
     <string name="TextoTelefono">Tfno</string>
     <string name="BotonGuardar">Guardar</string>
     <string name="BotonBorrarUsuario">Borrar Usuario</string>
+    <string name="title_activity_seleccion_rol">Seleccionar Rol</string>
 
 </resources>

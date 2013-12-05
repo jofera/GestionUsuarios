@@ -34,6 +34,10 @@
             android:name="es.uma.gestiondeusuarios.GestionarUsuario"
             android:label="@string/title_activity_gestionar_usuario" >
         </activity>
+        <activity
+            android:name="es.uma.gestiondeusuarios.SeleccionRol"
+            android:label="@string/title_activity_seleccion_rol" >
+        </activity>
     </application>
 
 </manifest>

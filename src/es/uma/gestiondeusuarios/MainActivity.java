@@ -16,23 +16,29 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        findViewById(R.id.campoUsuario).requestFocus();
-        final BDUsuarios bdUsuarios = new BDUsuarios(this);
-        bdUsuarios.addUsuario("admin", "admin");
-        bdUsuarios.addUsuario("usuario", "usuario");
-		bdUsuarios.addUsuario("invitado", "invitado");
+        findViewById(R.id.campoGestionUsuario).requestFocus();
+        final BD bd = new BD(getApplicationContext());
+        final Roles roles = new Roles();
+        
+        roles.addRol(bd.getWritableDatabase(),0, "invitado", "usuario invitado");
+        roles.addRol(bd.getWritableDatabase(),1, "admin", "administrador del sistema");
+        roles.addRol(bd.getWritableDatabase(),2, "usuario", "usuario del sistema");
+        final Usuarios usuarios = new Usuarios();
+        usuarios.addUsuario(bd.getWritableDatabase(),"invitado","invitado",0,"invitado@invitado.com","invitado","222222");
+        usuarios.addUsuario(bd.getWritableDatabase(),"admin","admin",1,"admin@admin.com","administrador","000000");
+        usuarios.addUsuario(bd.getWritableDatabase(),"usuario","usuario",2,"usuario@usuario.com","usuario","111111");
         final Button botonLogin = (Button) findViewById(R.id.botonLogin);
         botonLogin.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
+
+        	@Override
 			public void onClick(View v) {
-				final EditText campoUsuario = (EditText) findViewById(R.id.campoUsuario);
+				final EditText campoUsuario = (EditText) findViewById(R.id.campoGestionUsuario);
 				final EditText campoPassword = (EditText) findViewById(R.id.campoPassword);
 				if((campoUsuario.getText().toString().isEmpty()) && 
 						(campoPassword.getText().toString().isEmpty())){
 					Toast.makeText(getApplicationContext(), R.string.ErrorLoginVacio, Toast.LENGTH_LONG).show();
 				}else{
-					if(bdUsuarios.compruebaLogin((String) campoUsuario.getText().toString(), (String) campoPassword.getText().toString())){
+					if(usuarios.compruebaLogin(bd.getReadableDatabase(),(String) campoUsuario.getText().toString(), (String) campoPassword.getText().toString())){
 						Toast.makeText(getApplicationContext(), getResources().getString(R.string.LoginCorrecto) + " " + campoUsuario.getText().toString(), Toast.LENGTH_SHORT).show();						
 						Intent intent = new Intent(getApplicationContext(),ListaUsuarios.class);
 						overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -48,11 +54,11 @@ public class MainActivity extends Activity {
         botonLimpiar.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				final EditText campoUsuario = (EditText) findViewById(R.id.campoUsuario);
+				final EditText campoUsuario = (EditText) findViewById(R.id.campoGestionUsuario);
 				final EditText campoPassword = (EditText) findViewById(R.id.campoPassword);
 				campoUsuario.setText("");
 				campoPassword.setText("");
-		        findViewById(R.id.campoUsuario).requestFocus();
+		        findViewById(R.id.campoGestionUsuario).requestFocus();
 			}
 		});
     }
