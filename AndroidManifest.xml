@@ -30,6 +30,10 @@
             android:name="es.uma.gestiondeusuarios.ListaUsuarios"
             android:label="@string/title_activity_lista_usuarios" >
         </activity>
+        <activity
+            android:name="es.uma.gestiondeusuarios.GestionarUsuario"
+            android:label="@string/title_activity_gestionar_usuario" >
+        </activity>
     </application>
 
 </manifest>

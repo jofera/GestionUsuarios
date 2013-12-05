@@ -13,7 +13,8 @@ public class BDUsuarios extends SQLiteOpenHelper {
 	private static final int VERSION_DB = 1;
 	private static final String NOMBRE_DB = "Usuarios";
 	private static final String NOMBRE_TABLA = "tUsers";
-	private static final String sqlCreate = "CREATE TABLE " + NOMBRE_TABLA + " (usuario TEXT PRIMARY KEY, password TEXT)";
+	private static final String sqlCreate = "CREATE TABLE " + NOMBRE_TABLA + " (usuario TEXT PRIMARY KEY, password TEXT, " +
+			"rol INTEGER REFERENCES tRoles(ID), e_mail TEXT, nombre TEXT, tlfno TEXT)";
 
 	public BDUsuarios(Context context) {
 		super(context, NOMBRE_DB, null, VERSION_DB);
@@ -30,10 +31,11 @@ public class BDUsuarios extends SQLiteOpenHelper {
         onCreate(db);
 	}
 	
-	public void addUsuario(String nombre, String password){
+	public void addUsuario(String usuario, String password, int idRol, String email, String nombre, String telefono){
 		try {
 			SQLiteDatabase db = this.getWritableDatabase();
-			db.execSQL("INSERT INTO " + NOMBRE_TABLA + " (usuario, password) VALUES ('" + nombre + "', '" + password + "')");
+			db.execSQL("INSERT INTO " + NOMBRE_TABLA + " (usuario, password, rol, e_mail, nombre, tlfno) VALUES ('" + usuario + "', '" + password + "', " +
+					"'" + idRol + "', '" + email + "', '" + nombre + "', '" + telefono + "')");
 			db.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -79,8 +81,15 @@ public class BDUsuarios extends SQLiteOpenHelper {
 	}
 	
 	public boolean compruebaLogin(String usuario, String password){
-		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor c = db.rawQuery("SELECT * FROM " + NOMBRE_TABLA + " WHERE usuario = '" + usuario + "' AND password = '" + password + "'", null);
-		return (c.getCount() > 0);
+		boolean res = false;
+		try {
+			SQLiteDatabase db = this.getReadableDatabase();
+			Cursor c = db.rawQuery("SELECT * FROM " + NOMBRE_TABLA + " WHERE usuario = '" + usuario + "' AND password = '" + password + "'", null);
+			res = (c.getCount() > 0);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return res;
 	}
 }

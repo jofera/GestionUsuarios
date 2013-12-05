@@ -16,5 +16,14 @@
     <string name="title_activity_lista_usuarios">ListaUsuarios</string>
     <string name="BotonEntrar">Entrar</string>
     <string name="BotonLimpiar">Limpiar</string>
+    <string name="title_activity_gestionar_usuario">Gestionar Usuario</string>
+    <string name="TextoUsuario">Usuario</string>
+    <string name="TextoPassword">Password</string>
+    <string name="TextoRol">Rol</string>
+    <string name="TextoNombre">Nombre</string>
+    <string name="TextoEmail">E-Mail</string>
+    <string name="TextoTelefono">Tfno</string>
+    <string name="BotonGuardar">Guardar</string>
+    <string name="BotonBorrarUsuario">Borrar Usuario</string>
 
 </resources>

@@ -9,7 +9,7 @@
     tools:context=".MainActivity" >
 
     <EditText
-        android:id="@+id/campoUsuario"
+        android:id="@+id/campoGestionUsuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -24,7 +24,7 @@
         android:id="@+id/botonLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/campoUsuario"
+        android:layout_alignLeft="@+id/campoGestionUsuario"
         android:layout_below="@+id/campoPassword"
         android:layout_marginTop="62dp"
         android:text="@string/BotonEntrar" />
@@ -35,15 +35,15 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/botonLogin"
         android:layout_alignBottom="@+id/botonLogin"
-        android:layout_alignRight="@+id/campoUsuario"
+        android:layout_alignRight="@+id/campoGestionUsuario"
         android:text="@string/BotonLimpiar" />
 
     <EditText
         android:id="@+id/campoPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/campoUsuario"
-        android:layout_below="@+id/campoUsuario"
+        android:layout_alignLeft="@+id/campoGestionUsuario"
+        android:layout_below="@+id/campoGestionUsuario"
         android:layout_marginTop="43dp"
         android:ems="10"
         android:hint="@string/Password"
