@@ -103,7 +103,7 @@
         android:layout_height="fill_parent" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/botonGuardarCambios"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -111,7 +111,7 @@
             android:text="@string/BotonGuardar" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/botonBorrarUsuario"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

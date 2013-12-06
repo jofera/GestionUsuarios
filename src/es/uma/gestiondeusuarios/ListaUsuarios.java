@@ -20,15 +20,14 @@ public class ListaUsuarios extends Activity {
 		LinearLayout linearlayout = (LinearLayout) findViewById(R.id.linearlayout);
 		
         final BD bd = new BD(getApplicationContext());
-        final Usuarios usuarios = new Usuarios();
+        
+        List<Usuario> listaUsuarios = Usuario.listaUsuarios(bd.getReadableDatabase());
 		
-        List<Object[]> listaUsuarios = usuarios.obtenerUsuarios(bd.getReadableDatabase());
-		
-		for(Object[] usuario : listaUsuarios){
-			final TextView usuarioTV = new TextView(this.getApplicationContext());
+		for(Usuario usuario : listaUsuarios){
+			final TextView usuarioTV = new TextView(getApplicationContext());
 			usuarioTV.setTextSize((float) 32.0);
-			usuarioTV.setText((String) usuario[0]);
-			usuarioTV.setTag((String) usuario[0]);
+			usuarioTV.setText((String) usuario.getUsername());
+			usuarioTV.setTag((String) usuario.getUsername());
 			usuarioTV.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -40,7 +39,7 @@ public class ListaUsuarios extends Activity {
 			});
 			linearlayout.addView(usuarioTV);
 		}
-		TextView totalUsersTV = new TextView(this.getApplicationContext());
+		TextView totalUsersTV = new TextView(getApplicationContext());
 		totalUsersTV.setTextSize((float) 25.0);
 		totalUsersTV.setText("Hay un total de " + listaUsuarios.size() + " usuarios");
 		linearlayout.addView(totalUsersTV);
@@ -51,6 +50,12 @@ public class ListaUsuarios extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.lista_usuarios, menu);
 		return true;
+	}
+	
+	@Override
+	public void onBackPressed(){
+		Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+		startActivity(intent);
 	}
 
 }

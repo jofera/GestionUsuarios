@@ -11,22 +11,14 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-    @Override
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
         findViewById(R.id.campoGestionUsuario).requestFocus();
         final BD bd = new BD(getApplicationContext());
-        final Roles roles = new Roles();
-        
-        roles.addRol(bd.getWritableDatabase(),0, "invitado", "usuario invitado");
-        roles.addRol(bd.getWritableDatabase(),1, "admin", "administrador del sistema");
-        roles.addRol(bd.getWritableDatabase(),2, "usuario", "usuario del sistema");
-        final Usuarios usuarios = new Usuarios();
-        usuarios.addUsuario(bd.getWritableDatabase(),"invitado","invitado",0,"invitado@invitado.com","invitado","222222");
-        usuarios.addUsuario(bd.getWritableDatabase(),"admin","admin",1,"admin@admin.com","administrador","000000");
-        usuarios.addUsuario(bd.getWritableDatabase(),"usuario","usuario",2,"usuario@usuario.com","usuario","111111");
+
         final Button botonLogin = (Button) findViewById(R.id.botonLogin);
         botonLogin.setOnClickListener(new View.OnClickListener() {
 
@@ -38,7 +30,7 @@ public class MainActivity extends Activity {
 						(campoPassword.getText().toString().isEmpty())){
 					Toast.makeText(getApplicationContext(), R.string.ErrorLoginVacio, Toast.LENGTH_LONG).show();
 				}else{
-					if(usuarios.compruebaLogin(bd.getReadableDatabase(),(String) campoUsuario.getText().toString(), (String) campoPassword.getText().toString())){
+					if(Usuario.compruebaLogin(bd.getReadableDatabase(),(String) campoUsuario.getText().toString(), (String) campoPassword.getText().toString())){
 						Toast.makeText(getApplicationContext(), getResources().getString(R.string.LoginCorrecto) + " " + campoUsuario.getText().toString(), Toast.LENGTH_SHORT).show();						
 						Intent intent = new Intent(getApplicationContext(),ListaUsuarios.class);
 						overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
