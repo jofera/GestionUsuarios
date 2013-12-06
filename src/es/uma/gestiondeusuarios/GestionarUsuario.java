@@ -11,16 +11,17 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class GestionarUsuario extends Activity {
-	String usuarioIntent;
+	private Intent intentPrevio;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_gestionar_usuario);
 		Intent intent = getIntent();
-		usuarioIntent = (String) intent.getStringExtra("Usuario");
+		intentPrevio = getIntent();
 		
         final BD bd = new BD(getApplicationContext());
-		final Usuario usuario = new Usuario(bd.getReadableDatabase(),usuarioIntent);
+		final Usuario usuarioLogeado = new Usuario(bd.getReadableDatabase(),intent.getStringExtra("UsuarioLogeado"));
+		final Usuario usuario = new Usuario(bd.getReadableDatabase(),intent.getStringExtra("Usuario"));
 		
 		final EditText campoUsuario = (EditText) findViewById(R.id.campoGestionUsuario);
 		final EditText campoPassword = (EditText) findViewById(R.id.campoGestionPassword);
@@ -28,7 +29,9 @@ public class GestionarUsuario extends Activity {
 		final EditText campoNombre = (EditText) findViewById(R.id.campoGestionNombre);
 		final EditText campoEmail = (EditText) findViewById(R.id.campoGestionEmail);
 		final EditText campoTelefono = (EditText) findViewById(R.id.campoGestionTelefono);
+		@SuppressWarnings("unused")
 		final Button botonGuardarCambios = (Button) findViewById(R.id.botonGuardarCambios);
+		@SuppressWarnings("unused")
 		final Button botonBorrarUsuario = (Button) findViewById(R.id.botonBorrarUsuario);
 
 		
@@ -43,8 +46,9 @@ public class GestionarUsuario extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				if(usuario.getRol().getID() == Rol.ADMINISTRADOR){
+				if(usuarioLogeado.getRol().getID() == Rol.ADMINISTRADOR){
 					Intent intentRol = new Intent(getApplicationContext(), SeleccionRol.class);
+					intentRol.putExtra("UsuarioLogeado", intentPrevio.getStringExtra("UsuarioLogeado"));
 					intentRol.putExtra("Usuario",campoUsuario.getText().toString());
 					startActivity(intentRol);
 				}else{
@@ -52,7 +56,7 @@ public class GestionarUsuario extends Activity {
 				}
 			}
 		});
-		
+		/*
 		botonGuardarCambios.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -76,7 +80,8 @@ public class GestionarUsuario extends Activity {
 				startActivity(intent);
 			}
 		});
-		
+		*/
+		/*
 		botonBorrarUsuario.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -84,6 +89,7 @@ public class GestionarUsuario extends Activity {
 				
 			}
 		});
+		*/
 	}
 
 	@Override
@@ -95,6 +101,7 @@ public class GestionarUsuario extends Activity {
 	@Override
 	public void onBackPressed(){
 		Intent intent = new Intent(getApplicationContext(), ListaUsuarios.class);
+		intent.putExtra("UsuarioLogeado", intentPrevio.getStringExtra("UsuarioLogeado"));
 		startActivity(intent);
 	}
 

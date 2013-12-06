@@ -22,9 +22,9 @@ public class Rol{
 			String consulta = "SELECT * FROM " + BD.TABLA_ROLES + " WHERE ID = '" + ID + "'";
 			Cursor c = db.rawQuery(consulta, null);
 			if(c.moveToFirst()){
-				this.id = Integer.getInteger(c.getString(0));
-				this.rolName = c.getString(1);
-				this.rolDes = c.getString(2);
+				this.id = c.getInt(c.getColumnIndex("ID"));
+				this.rolName = c.getString(c.getColumnIndex("rolName"));
+				this.rolDes = c.getString(c.getColumnIndex("rolDes"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -50,53 +50,25 @@ public class Rol{
 		}
 	}
 	
-	public int getID(){
-		return id;
-	}
-	
 	public static List<Rol> listaRoles(SQLiteDatabase db){
-		String consulta = "SELECT * FROM " + BD.TABLA_ROLES;
-		Cursor c = db.rawQuery(consulta, null);
 		List<Rol> listaRoles = new ArrayList<Rol>();
-		if(c.moveToFirst()){
-			Rol rol;
-			do{
-				rol = new Rol(db,Integer.getInteger(c.getString(0)));
-				listaRoles.add(rol);
-			}while(c.moveToNext());
+		try {
+			String consulta = "SELECT ID FROM " + BD.TABLA_ROLES;
+			Cursor c = db.rawQuery(consulta, null);
+			if(c.moveToFirst()){
+				Rol rol;
+				do{
+					rol = new Rol(db,c.getInt(0));
+					listaRoles.add(rol);
+				}while(c.moveToNext());
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return listaRoles;
 	}
 	
-	public Object[] obtenerRol(SQLiteDatabase db,int ID){
-		String consulta = "SELECT * FROM " + BD.TABLA_ROLES + " WHERE ID = '" + ID + "'";
-		Cursor c = db.rawQuery(consulta, null);
-		Object[] rol = null;
-		if(c.moveToFirst()){
-			rol = new Object[c.getColumnCount()];
-			int numFilas = c.getColumnCount();
-			for(int i = 0;i<numFilas;i++){
-				rol[i] = c.getString(i);
-			}
-		}
-		return rol;
-	}
-	
-	public String nombreRol(SQLiteDatabase db,int ID){
-		String consulta = "SELECT rolName FROM " + BD.TABLA_ROLES + " WHERE ID = '" + ID + "'";
-		Cursor c = db.rawQuery(consulta, null);
-		Object[] rol = null;
-		if(c.moveToFirst()){
-			rol = new Object[c.getColumnCount()];
-			int numFilas = c.getColumnCount();
-			for(int i = 0;i<numFilas;i++){
-				rol[i] = c.getString(i);
-			}
-		}
-		return rol[0].toString();
-	}
-
-	public int getId() {
+	public int getID() {
 		return id;
 	}
 
@@ -119,7 +91,4 @@ public class Rol{
 	public void setRolDes(String rolDes) {
 		this.rolDes = rolDes;
 	}
-	
-	
-	
 }

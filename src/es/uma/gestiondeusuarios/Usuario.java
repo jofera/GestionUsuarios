@@ -23,12 +23,12 @@ public class Usuario {
 			String consulta = "SELECT * FROM " + BD.TABLA_USUARIOS + " WHERE usuario = '" + usuario + "'";
 			Cursor c = db.rawQuery(consulta, null);
 			if(c.moveToFirst()){
-				username = (String) c.getString(0);
-				pwd = c.getString(1);
-				rol = new Rol(db,Integer.getInteger(c.getString(2)));
-				e_mail = c.getString(3);
-				nombre = c.getString(4);
-				tlfno = c.getString(5);
+				this.username = c.getString(c.getColumnIndex("usuario"));
+				this.pwd = c.getString(c.getColumnIndex("password"));
+				this.rol = new Rol(db,c.getInt((c.getColumnIndex("rol"))));
+				this.e_mail = c.getString(c.getColumnIndex("email"));
+				this.nombre = c.getString(c.getColumnIndex("nombre"));
+				this.tlfno = c.getString(c.getColumnIndex("tlfno"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -39,6 +39,7 @@ public class Usuario {
 		return this.rol;
 	}
 	
+	// Convertir en un constructor
 	public void addUsuario(SQLiteDatabase db, String usuario, String password, int idRol, String email, String nombre, String telefono){
 		if (rol.getID() != Rol.ADMINISTRADOR){
 			throw new RuntimeException("Sólo los administradores pueden añadir usuarios");
@@ -63,15 +64,19 @@ public class Usuario {
 	}
 	
 	public static List<Usuario> listaUsuarios(SQLiteDatabase db){
-        String consulta = "SELECT usuario FROM " + BD.TABLA_USUARIOS;
-		Cursor c = db.rawQuery(consulta, null);
-		List<Usuario> listaUsuarios = new ArrayList<Usuario>();
-		if(c.moveToFirst()){
-			Usuario usuario;
-			do{
-				usuario = new Usuario(db,c.getString(0));
-				listaUsuarios.add(usuario);
-			}while(c.moveToNext());
+		List<Usuario> listaUsuarios = new ArrayList<Usuario>();		
+        try {
+			String consulta = "SELECT usuario FROM " + BD.TABLA_USUARIOS;
+			Cursor c = db.rawQuery(consulta, null);
+			if(c.moveToFirst()){
+				Usuario usuario;
+				do{
+					usuario = new Usuario(db,c.getString(0));
+					listaUsuarios.add(usuario);
+				}while(c.moveToNext());
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return listaUsuarios;
 	}

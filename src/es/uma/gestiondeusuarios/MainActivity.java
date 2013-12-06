@@ -33,6 +33,7 @@ public class MainActivity extends Activity {
 					if(Usuario.compruebaLogin(bd.getReadableDatabase(),(String) campoUsuario.getText().toString(), (String) campoPassword.getText().toString())){
 						Toast.makeText(getApplicationContext(), getResources().getString(R.string.LoginCorrecto) + " " + campoUsuario.getText().toString(), Toast.LENGTH_SHORT).show();						
 						Intent intent = new Intent(getApplicationContext(),ListaUsuarios.class);
+						intent.putExtra("UsuarioLogeado",campoUsuario.getText().toString());
 						overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 						startActivity(intent);
 					}else{
