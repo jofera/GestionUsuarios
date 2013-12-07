@@ -59,23 +59,27 @@ public class GestionarUsuario extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				try {
-					usuario.setUsername(bd.getWritableDatabase(), campoUsuario.getText().toString());
-					usuario.setPwd(bd.getWritableDatabase(), campoPassword.getText().toString());
-					usuario.setE_mail(bd.getWritableDatabase(), campoEmail.getText().toString());
-					
-					usuario.setNombre(bd.getWritableDatabase(), campoNombre.getText().toString());
-					usuario.setTlfno(bd.getWritableDatabase(), campoTelefono.getText().toString());
-				} catch (RuntimeException e) {
-					Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+				if(usuarioLogeado.getRol().getID() == Rol.ADMINISTRADOR){
+					try {
+						usuario.setUsername(bd.getWritableDatabase(), campoUsuario.getText().toString());
+						usuario.setPwd(bd.getWritableDatabase(), campoPassword.getText().toString());
+						usuario.setE_mail(bd.getWritableDatabase(), campoEmail.getText().toString());
+						
+						usuario.setNombre(bd.getWritableDatabase(), campoNombre.getText().toString());
+						usuario.setTlfno(bd.getWritableDatabase(), campoTelefono.getText().toString());
+					} catch (RuntimeException e) {
+						Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+						Intent intent = new Intent(getApplicationContext(), ListaUsuarios.class);
+						intent.putExtra("UsuarioLogeado", intentPrevio.getStringExtra("UsuarioLogeado"));
+						startActivity(intent);
+					}
+					Toast.makeText(getApplicationContext(), "Cambios guardados", Toast.LENGTH_SHORT).show();
 					Intent intent = new Intent(getApplicationContext(), ListaUsuarios.class);
 					intent.putExtra("UsuarioLogeado", intentPrevio.getStringExtra("UsuarioLogeado"));
 					startActivity(intent);
+				}else{
+					Toast.makeText(getApplicationContext(), "Necesita ser administrador", Toast.LENGTH_SHORT).show();
 				}
-				Toast.makeText(getApplicationContext(), "Cambios guardados", Toast.LENGTH_SHORT).show();
-				Intent intent = new Intent(getApplicationContext(), ListaUsuarios.class);
-				intent.putExtra("UsuarioLogeado", intentPrevio.getStringExtra("UsuarioLogeado"));
-				startActivity(intent);
 			}
 		});
 		
@@ -83,15 +87,19 @@ public class GestionarUsuario extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				try {
-					usuario.delUsuario(bd.getWritableDatabase());
-				} catch (Exception e) {
-					e.printStackTrace();
+				if(usuarioLogeado.getRol().getID() == Rol.ADMINISTRADOR){
+					try {
+						usuario.delUsuario(bd.getWritableDatabase());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					Toast.makeText(getApplicationContext(), "Usuario eliminado", Toast.LENGTH_SHORT).show();
+					Intent intent = new Intent(getApplicationContext(), ListaUsuarios.class);
+					intent.putExtra("UsuarioLogeado", intentPrevio.getStringExtra("UsuarioLogeado"));
+					startActivity(intent);
+				}else{
+					Toast.makeText(getApplicationContext(), "Necesita ser administrador", Toast.LENGTH_SHORT).show();
 				}
-				Toast.makeText(getApplicationContext(), "Usuario eliminado", Toast.LENGTH_SHORT).show();
-				Intent intent = new Intent(getApplicationContext(), ListaUsuarios.class);
-				intent.putExtra("UsuarioLogeado", intentPrevio.getStringExtra("UsuarioLogeado"));
-				startActivity(intent);
 			}
 		});
 	}

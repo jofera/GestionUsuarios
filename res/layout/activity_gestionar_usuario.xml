@@ -108,16 +108,16 @@
             android:id="@+id/botonGuardarCambios"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
             android:text="@string/BotonGuardar" />
 
         <Button
             android:id="@+id/botonBorrarUsuario"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
             android:text="@string/BotonBorrarUsuario" />
 
     </RelativeLayout>

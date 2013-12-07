@@ -39,7 +39,6 @@ public class Usuario {
 		return this.rol;
 	}
 	
-	// Convertir en un constructor
 	public void addUsuario(SQLiteDatabase db, String usuario, String password, Rol rol, String email, String nombre, String telefono){
 		if (this.rol.getID() != Rol.ADMINISTRADOR){
 			throw new RuntimeException("Sólo los administradores pueden añadir usuarios");
