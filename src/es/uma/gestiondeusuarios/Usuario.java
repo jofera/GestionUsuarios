@@ -40,24 +40,36 @@ public class Usuario {
 	}
 	
 	// Convertir en un constructor
-	public void addUsuario(SQLiteDatabase db, String usuario, String password, int idRol, String email, String nombre, String telefono){
-		if (rol.getID() != Rol.ADMINISTRADOR){
+	public void addUsuario(SQLiteDatabase db, String usuario, String password, Rol rol, String email, String nombre, String telefono){
+		if (this.rol.getID() != Rol.ADMINISTRADOR){
 			throw new RuntimeException("Sólo los administradores pueden añadir usuarios");
 		}else{
 			try{
 				db.execSQL("INSERT INTO " + BD.TABLA_USUARIOS + " (usuario, password, rol, email, nombre, tlfno) VALUES ('" + usuario + "', '" + password + "', " +
-					"'" + idRol + "', '" + email + "', '" + nombre + "', '" + telefono + "')");
+					"'" + rol.getID() + "', '" + email + "', '" + nombre + "', '" + telefono + "')");
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 	
-	public void editarUsuario(SQLiteDatabase db,String UsuarioAntiguo, String usuario, String password, int idRol, String email, String nombre, String telefono){
+	public void editarUsuario(SQLiteDatabase db, String usuario, String password, int idRol, String email, String nombre, String telefono){
 		try {
 			db.execSQL("UPDATE " + BD.TABLA_USUARIOS + " SET usuario = '" + usuario + "', password = '" + password + "', rol = '" + idRol + "', email = '" 
-					+ email + "', nombre = '" + nombre + "', tlfno = '" + telefono + "' WHERE usuario = '" + UsuarioAntiguo + "'");
-			db.close();
+					+ email + "', nombre = '" + nombre + "', tlfno = '" + telefono + "' WHERE usuario = '" + this.getUsername() + "'");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void delUsuario(SQLiteDatabase db){
+		try {
+			db.execSQL("DELETE FROM " + BD.TABLA_USUARIOS + " WHERE usuario = '" + this.getUsername() + "'");
+			this.e_mail = null;
+			this.nombre = null;
+			this.pwd = null;
+			this.tlfno = null;
+			this.username = null;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -150,7 +162,7 @@ public class Usuario {
 
 	public void setTlfno(SQLiteDatabase db,String tlfno) {
 		try {
-			db.execSQL("UPDATE " + BD.TABLA_USUARIOS + " SET telefono = '" + tlfno + "' WHERE usuario = '" + this.username + "'");
+			db.execSQL("UPDATE " + BD.TABLA_USUARIOS + " SET tlfno = '" + tlfno + "' WHERE usuario = '" + this.username + "'");
 			this.tlfno = tlfno;
 		} catch (SQLiteException e) {
 			throw new RuntimeException("No se ha podido modificar el telefono.");
@@ -158,15 +170,11 @@ public class Usuario {
 	}
 
 	public void setRol(SQLiteDatabase db,Rol rol) {
-		if(this.getRol().getID() != Rol.ADMINISTRADOR){
-			throw new RuntimeException("Solo los administradores pueden modificar el rol.");
-		}else{
-			try {
-				db.execSQL("UPDATE " + BD.TABLA_USUARIOS + " SET rol = '" + rol.getID() + "' WHERE usuario = '" + this.username + "'");
-				this.rol = rol;
-			} catch (SQLiteException e) {
-				throw new RuntimeException("No se ha podido modificar el rol.");
-			}
+		try {
+			db.execSQL("UPDATE " + BD.TABLA_USUARIOS + " SET rol = '" + rol.getID() + "' WHERE usuario = '" + this.username + "'");
+			this.rol = rol;
+		} catch (SQLiteException e) {
+			throw new RuntimeException("No se ha podido modificar el rol.");
 		}
 	}
 

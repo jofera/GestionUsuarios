@@ -23,10 +23,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="es.uma.gestiondeusuarios.GestionUsuarios"
-            android:label="@string/title_activity_gestion_usuarios" >
-        </activity>
-        <activity
             android:name="es.uma.gestiondeusuarios.ListaUsuarios"
             android:label="@string/title_activity_lista_usuarios" >
         </activity>
@@ -37,6 +33,10 @@
         <activity
             android:name="es.uma.gestiondeusuarios.SeleccionRol"
             android:label="@string/title_activity_seleccion_rol" >
+        </activity>
+        <activity 
+            android:name="es.uma.gestiondeusuarios.NuevoUsuario" 
+            android:label="@string/title_activity_gestion_usuarios">
         </activity>
     </application>
 

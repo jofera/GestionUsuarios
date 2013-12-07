@@ -16,12 +16,11 @@ public class GestionarUsuario extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_gestionar_usuario);
-		Intent intent = getIntent();
 		intentPrevio = getIntent();
 		
         final BD bd = new BD(getApplicationContext());
-		final Usuario usuarioLogeado = new Usuario(bd.getReadableDatabase(),intent.getStringExtra("UsuarioLogeado"));
-		final Usuario usuario = new Usuario(bd.getReadableDatabase(),intent.getStringExtra("Usuario"));
+		final Usuario usuarioLogeado = new Usuario(bd.getReadableDatabase(),intentPrevio.getStringExtra("UsuarioLogeado"));
+		final Usuario usuario = new Usuario(bd.getReadableDatabase(),intentPrevio.getStringExtra("Usuario"));
 		
 		final EditText campoUsuario = (EditText) findViewById(R.id.campoGestionUsuario);
 		final EditText campoPassword = (EditText) findViewById(R.id.campoGestionPassword);
@@ -29,9 +28,7 @@ public class GestionarUsuario extends Activity {
 		final EditText campoNombre = (EditText) findViewById(R.id.campoGestionNombre);
 		final EditText campoEmail = (EditText) findViewById(R.id.campoGestionEmail);
 		final EditText campoTelefono = (EditText) findViewById(R.id.campoGestionTelefono);
-		@SuppressWarnings("unused")
 		final Button botonGuardarCambios = (Button) findViewById(R.id.botonGuardarCambios);
-		@SuppressWarnings("unused")
 		final Button botonBorrarUsuario = (Button) findViewById(R.id.botonBorrarUsuario);
 
 		
@@ -50,13 +47,14 @@ public class GestionarUsuario extends Activity {
 					Intent intentRol = new Intent(getApplicationContext(), SeleccionRol.class);
 					intentRol.putExtra("UsuarioLogeado", intentPrevio.getStringExtra("UsuarioLogeado"));
 					intentRol.putExtra("Usuario",campoUsuario.getText().toString());
+					intentRol.putExtra("ClaseLLama", "GestionarUsuario");
 					startActivity(intentRol);
 				}else{
 					Toast.makeText(getApplicationContext(), "Necesita ser administrador", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
-		/*
+
 		botonGuardarCambios.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -64,32 +62,38 @@ public class GestionarUsuario extends Activity {
 				try {
 					usuario.setUsername(bd.getWritableDatabase(), campoUsuario.getText().toString());
 					usuario.setPwd(bd.getWritableDatabase(), campoPassword.getText().toString());
-					if(usuario.getRol().getID() == Rol.ADMINISTRADOR){
-						usuario.setRol(bd.getWritableDatabase(), usuario.getRol());
-					}
 					usuario.setE_mail(bd.getWritableDatabase(), campoEmail.getText().toString());
-					usuario.setUsername(bd.getWritableDatabase(), campoUsuario.getText().toString());
+					
+					usuario.setNombre(bd.getWritableDatabase(), campoNombre.getText().toString());
 					usuario.setTlfno(bd.getWritableDatabase(), campoTelefono.getText().toString());
 				} catch (RuntimeException e) {
 					Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
 					Intent intent = new Intent(getApplicationContext(), ListaUsuarios.class);
+					intent.putExtra("UsuarioLogeado", intentPrevio.getStringExtra("UsuarioLogeado"));
 					startActivity(intent);
 				}
 				Toast.makeText(getApplicationContext(), "Cambios guardados", Toast.LENGTH_SHORT).show();
 				Intent intent = new Intent(getApplicationContext(), ListaUsuarios.class);
+				intent.putExtra("UsuarioLogeado", intentPrevio.getStringExtra("UsuarioLogeado"));
 				startActivity(intent);
 			}
 		});
-		*/
-		/*
+		
 		botonBorrarUsuario.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				
+				try {
+					usuario.delUsuario(bd.getWritableDatabase());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				Toast.makeText(getApplicationContext(), "Usuario eliminado", Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(getApplicationContext(), ListaUsuarios.class);
+				intent.putExtra("UsuarioLogeado", intentPrevio.getStringExtra("UsuarioLogeado"));
+				startActivity(intent);
 			}
 		});
-		*/
 	}
 
 	@Override

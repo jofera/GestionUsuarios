@@ -16,11 +16,30 @@ public class ListaUsuarios extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_lista_usuarios);
-		final String UsuarioLogeado = getIntent().getStringExtra("UsuarioLogeado");
+		
 		LinearLayout linearlayout = (LinearLayout) findViewById(R.id.linearlayout);
 		
-        final BD bd = new BD(getApplicationContext());        
+        final BD bd = new BD(getApplicationContext());
+        final Usuario UsuarioLogeado = new Usuario(bd.getReadableDatabase(), getIntent().getStringExtra("UsuarioLogeado"));
         final List<Usuario> listaUsuarios = Usuario.listaUsuarios(bd.getReadableDatabase());
+		
+		if (UsuarioLogeado.getRol().getID() == Rol.ADMINISTRADOR) {
+			TextView agregarUserTV = new TextView(getApplicationContext());
+			agregarUserTV.setTextSize((float) 25.0);
+			agregarUserTV.setTextColor(getResources().getColor(
+					android.R.color.black));
+			agregarUserTV.setText("Agregar un usuario");
+			agregarUserTV.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(getApplicationContext(), SeleccionRol.class);
+					intent.putExtra("UsuarioLogeado", UsuarioLogeado.getUsername());
+					startActivity(intent);
+				}
+			});
+			linearlayout.addView(agregarUserTV);
+		}
 		
 		for(Usuario usuario : listaUsuarios){
 			final TextView usuarioTV = new TextView(getApplicationContext());
@@ -31,8 +50,8 @@ public class ListaUsuarios extends Activity {
 				@Override
 				public void onClick(View v) {
 					Intent intent = new Intent(getApplicationContext(), GestionarUsuario.class);
+					intent.putExtra("UsuarioLogeado", UsuarioLogeado.getUsername());
 					intent.putExtra("Usuario", usuarioTV.getTag().toString());
-					intent.putExtra("UsuarioLogeado", UsuarioLogeado);
 					startActivity(intent);
 				}
 			});

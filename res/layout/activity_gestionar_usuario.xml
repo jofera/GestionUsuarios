@@ -52,7 +52,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/TextoRol" />
+        android:focusableInTouchMode="false"
+        android:hint="@string/TextoRol"
+        android:inputType="none" />
 
     <TextView
         android:id="@+id/tituloCampoNombre"
