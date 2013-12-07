@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ListaUsuarios extends Activity {
 	@Override
@@ -23,23 +24,25 @@ public class ListaUsuarios extends Activity {
         final Usuario UsuarioLogeado = new Usuario(bd.getReadableDatabase(), getIntent().getStringExtra("UsuarioLogeado"));
         final List<Usuario> listaUsuarios = Usuario.listaUsuarios(bd.getReadableDatabase());
 		
-		if (UsuarioLogeado.getRol().getID() == Rol.ADMINISTRADOR) {
-			TextView agregarUserTV = new TextView(getApplicationContext());
-			agregarUserTV.setTextSize((float) 25.0);
-			agregarUserTV.setTextColor(getResources().getColor(
-					android.R.color.black));
-			agregarUserTV.setText("Agregar un usuario");
-			agregarUserTV.setOnClickListener(new OnClickListener() {
+		TextView agregarUserTV = new TextView(getApplicationContext());
+		agregarUserTV.setTextSize((float) 25.0);
+		agregarUserTV.setTextColor(getResources().getColor(
+				android.R.color.black));
+		agregarUserTV.setText("Agregar un usuario");
+		agregarUserTV.setOnClickListener(new OnClickListener() {
 
-				@Override
-				public void onClick(View v) {
+			@Override
+			public void onClick(View v) {
+				if (UsuarioLogeado.getRol().getID() == Rol.ADMINISTRADOR) {
 					Intent intent = new Intent(getApplicationContext(), SeleccionRol.class);
 					intent.putExtra("UsuarioLogeado", UsuarioLogeado.getUsername());
 					startActivity(intent);
+				}else{
+					Toast.makeText(getApplicationContext(), "Necesita ser administrador", Toast.LENGTH_SHORT).show();
 				}
-			});
-			linearlayout.addView(agregarUserTV);
-		}
+			}
+		});
+		linearlayout.addView(agregarUserTV);
 		
 		for(Usuario usuario : listaUsuarios){
 			final TextView usuarioTV = new TextView(getApplicationContext());

@@ -61,6 +61,7 @@ public class NuevoUsuario extends Activity {
 				startActivity(intent);
 			}
 		});
+		
 	}
     
 	@Override
